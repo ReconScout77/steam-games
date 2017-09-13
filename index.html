@@ -1,0 +1,41 @@
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="build/css/vendor.css">
+  <script src="build/js/vendor.min.js"></script>
+  <script type="text/javascript" src="build/js/app.js"></script>
+  <script src="bower_components/moment/min/moment.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+
+  <meta charset="utf-8">
+  <title>Steam Person Finder</title>
+</head>
+<body>
+  <div class="container">
+
+    <form id="steam-id-form" class="form-group">
+      <label for="realm">Enter Steam ID:</label>
+      <input type="text" name="realm" id="steam-id" class="form-control">
+
+      <button type="submit" name="button" class="btn btn-success">Find!</button>
+    </form>
+
+    <div id="result">
+      <h2 id="gameCount"></h2>
+
+      <table class="table table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Game</th>
+      <th>Minutes Played</th>
+    </tr>
+  </thead>
+  <tbody id="table-game-insertion">
+  </tbody>
+</table>
+
+      </div>
+    </div>
+</body>
+</html>
