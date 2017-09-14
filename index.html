@@ -13,6 +13,34 @@
 <body>
   <div class="container">
 
+    <div class="modal fade" id="achievementModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 id="modal-title-achievements"></h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Completed</th>
+                </tr>
+              </thead>
+              <tbody id="table-achievement-insertion">
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <form id="steam-id-form" class="form-group">
       <label for="realm">Enter Steam ID:</label>
       <input type="text" name="realm" id="steam-id" class="form-control">
@@ -24,16 +52,17 @@
       <h2 id="gameCount"></h2>
 
       <table class="table table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Game</th>
-      <th>Minutes Played</th>
-    </tr>
-  </thead>
-  <tbody id="table-game-insertion">
-  </tbody>
-</table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Game</th>
+            <th>Achievements</th>
+            <th>Minutes Played</th>
+          </tr>
+        </thead>
+        <tbody id="table-game-insertion">
+        </tbody>
+      </table>
 
       </div>
     </div>

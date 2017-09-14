@@ -1,4 +1,6 @@
 import {SteamGames} from './../js/all-games.js';
+import {GameAchievements} from './../js/game-achievements.js';
+import {PlayerAchievements} from './../js/player-achievements.js';
 
 $(document).ready(function() {
   $('#steam-id-form').submit(function(e) {
@@ -18,8 +20,6 @@ $(document).ready(function() {
       let nameRequest = new XMLHttpRequest();
       let steamNameURL = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=7AAED77B42E17590FAC15676F062027D&vanityurl=${steamName}`;
 
-      console.log(steamNameURL);
-
       nameRequest.onload = function() {
         if (this.status === 200) {
           resolve(nameRequest.response);
@@ -36,7 +36,7 @@ $(document).ready(function() {
       steamName = body.response.steamid;
 
       if(steamName != undefined) {
-
+        steamId = steamName;
         let idPromise = new Promise(function(resolve, reject) {
           let request = new XMLHttpRequest();
           let url = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=7AAED77B42E17590FAC15676F062027D&steamid=${steamName}&include_appinfo=1&has_community_visible_stats=1&format=json`;
@@ -65,7 +65,6 @@ $(document).ready(function() {
           for (var i = 0; i < body.response.game_count; i++) {
             allGames.push(body.response.games[i]);
           }
-          console.log(allGames);
 
           allGames.sort(function(a,b) {
             return b.playtime_forever - a.playtime_forever;
@@ -79,7 +78,6 @@ $(document).ready(function() {
       } else {
         let idPromise = new Promise(function(resolve, reject){
 
-          console.log("SECOND PROMISE: " + steamId);
           let request = new XMLHttpRequest();
           let url = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=7AAED77B42E17590FAC15676F062027D&steamid=${steamId}&include_appinfo=1&has_community_visible_stats=1&format=json`;
 
@@ -107,7 +105,6 @@ $(document).ready(function() {
           for (var i = 0; i < body.response.game_count; i++) {
             allGames.push(body.response.games[i]);
           }
-          console.log(allGames);
 
           allGames.sort(function(a,b) {
             return b.playtime_forever - a.playtime_forever;
@@ -115,8 +112,46 @@ $(document).ready(function() {
 
           for (var j = 0; j < allGames.length; j++) {
 
-            $('#table-game-insertion').append(`<tr value="${allGames[j].appid}">
-              <td><img src="http://media.steampowered.com/steamcommunity/public/images/apps/${allGames[j].appid}/${allGames[j].img_logo_url}.jpg"></td><td><a href="game-achievements.html">${allGames[j].name}</a></td><td>${allGames[j].playtime_forever}</td></tr>`);
+            $('#table-game-insertion').append(`<tr>
+              <td><img src="http://media.steampowered.com/steamcommunity/public/images/apps/${allGames[j].appid}/${allGames[j].img_logo_url}.jpg"></td><td>${allGames[j].name}</td>
+                <td><button type="button" class="btn btn-success achievement" value="${allGames[j].appid}" data-toggle="modal" data-target="#achievementModal">Achievements</button></td>
+
+
+              </td><td>${allGames[j].playtime_forever}</td></tr>`);
+
+              let chosenGame = allGames[j].name;
+
+              $('.achievement').last().click(function() {
+                let appId = $(this).val();
+
+                let playerAchievements = new PlayerAchievements(appId, steamId);
+
+                playerAchievements.getData();
+
+                  playerAchievements.getGameAchievements();
+
+                $("#table-achievement-insertion").text("");
+                setTimeout(function() {
+                  $("#modal-title-achievements").text(chosenGame);
+                  console.log(playerAchievements.achievements);
+                  console.log(playerAchievements.achievementIcons);
+
+                  //$(".modal-title").text(allGames[j].name);
+                  console.log(playerAchievements.achievements.length);
+                  for(let i = 0; i < playerAchievements.achievements.length; i++) {
+                    let icon = playerAchievements.achievementIcons[i];
+
+                    $("#table-achievement-insertion").append(`<tr>
+                      <td><img src="${playerAchievements.achievementIcons[i]}"></td><td>${playerAchievements.achievements[i].name}</td>
+                        <td>${playerAchievements.achievements[i].description}</td><td>${playerAchievements.achievements[i].unlocktime}</td></tr>`);
+                    }
+                }, 3000);
+
+
+
+
+              });
+
           }
 
         }, function(error) {
@@ -128,4 +163,5 @@ $(document).ready(function() {
     });
 
   });
+
 });
